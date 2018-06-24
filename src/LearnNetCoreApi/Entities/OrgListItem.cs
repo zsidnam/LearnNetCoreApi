@@ -18,7 +18,7 @@ namespace LearnNetCoreApi.Entities
 
         public Guid OrgListId { get; set; }
 
-        [ForeignKey("ListId")]
+        [ForeignKey("OrgListId")]
         public OrgList OrgList { get; set; }
     }
 }

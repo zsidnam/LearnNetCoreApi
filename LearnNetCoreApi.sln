@@ -3,11 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2008
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearnNetCoreApi", "LearnNetCoreApi\LearnNetCoreApi.csproj", "{691493E3-83F8-456F-A929-910A9DB1CD27}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{861E44D9-E975-424F-8621-A8C20A99F0DA}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Organization", "Organization\Organization.sqlproj", "{4261C08B-8763-4F17-B303-7C60A6C1BDF6}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{951CFA70-4486-45A3-AD42-329E9121F42D}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearnNetCoreApi", "src\LearnNetCoreApi\LearnNetCoreApi.csproj", "{3920E6D4-CFE8-487B-A2B8-BA3E0DB50145}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Organization.Database", "src\Organization.Database\Organization.Database.sqlproj", "{4261C08B-8763-4F17-B303-7C60A6C1BDF6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +21,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{691493E3-83F8-456F-A929-910A9DB1CD27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{691493E3-83F8-456F-A929-910A9DB1CD27}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{691493E3-83F8-456F-A929-910A9DB1CD27}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{691493E3-83F8-456F-A929-910A9DB1CD27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3920E6D4-CFE8-487B-A2B8-BA3E0DB50145}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3920E6D4-CFE8-487B-A2B8-BA3E0DB50145}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3920E6D4-CFE8-487B-A2B8-BA3E0DB50145}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3920E6D4-CFE8-487B-A2B8-BA3E0DB50145}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4261C08B-8763-4F17-B303-7C60A6C1BDF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4261C08B-8763-4F17-B303-7C60A6C1BDF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4261C08B-8763-4F17-B303-7C60A6C1BDF6}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
@@ -30,7 +36,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{691493E3-83F8-456F-A929-910A9DB1CD27} = {861E44D9-E975-424F-8621-A8C20A99F0DA}
+		{3920E6D4-CFE8-487B-A2B8-BA3E0DB50145} = {861E44D9-E975-424F-8621-A8C20A99F0DA}
 		{4261C08B-8763-4F17-B303-7C60A6C1BDF6} = {861E44D9-E975-424F-8621-A8C20A99F0DA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
