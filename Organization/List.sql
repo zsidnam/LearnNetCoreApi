@@ -1,0 +1,7 @@
+﻿CREATE TABLE [dbo].[OrgList]
+(
+	[OrgListId] UNIQUEIDENTIFIER NOT NULL, 
+    [Title] VARCHAR(100) NOT NULL, 
+    [Description] VARCHAR(500) NOT NULL,
+	CONSTRAINT [PK_OrgList] PRIMARY KEY CLUSTERED ([OrgListId] ASC)
+)

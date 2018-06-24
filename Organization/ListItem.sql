@@ -1,0 +1,9 @@
+﻿CREATE TABLE [dbo].[OrgListItem]
+(
+	[OrgListItemId] UNIQUEIDENTIFIER NOT NULL,
+	[OrgListId] UNIQUEIDENTIFIER NOT NULL,
+	[Title] VARCHAR(250) NOT NULL,
+	[IsComplete] BIT NOT NULL DEFAULT 0,
+	CONSTRAINT [PK_OrgListItem] PRIMARY KEY CLUSTERED ([OrgListItemId] ASC),
+	CONSTRAINT [FK_OrgListItem_OrgList_OrgListId] FOREIGN KEY ([OrgListId]) REFERENCES [dbo].[OrgList] ([OrgListId])
+)
