@@ -6,32 +6,58 @@ using System.Collections.Generic;
 using System;
 using LearnNetCoreApi.Entities;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.Extensions.Logging;
+using LearnNetCoreApi.Helpers;
+using Newtonsoft.Json;
 
 namespace LearnNetCoreApi.Controllers
 {
     [Route("api/orgLists")]
     public class OrgListsController : Controller
     {
-        // TODO: Add logger
-        // TODO: Add validation
-
         #region Dependency Injection
 
-        private IOrganizationRepository _orgRepository;
+        private readonly IOrganizationRepository _orgRepository;
+        private readonly ILogger<OrgListsController> _logger;
+        private readonly IUrlHelper _urlHelper;
 
-        public OrgListsController(IOrganizationRepository orgRepository)
+        public OrgListsController(IOrganizationRepository orgRepository,
+            ILogger<OrgListsController> logger, IUrlHelper urlHelper)
         {
+            _logger = logger;
+            _urlHelper = urlHelper;
             _orgRepository = orgRepository;
         }
 
         #endregion
 
-        [HttpGet()]
-        public IActionResult GetOrgLists()
+        [HttpGet(Name = "GetOrgLists")]
+        public IActionResult GetOrgLists(OrgListResourceParameters queryParams)
         {
-            var orgListsFromRepo = _orgRepository.GetOrgLists();
+            var orgListsFromRepo = _orgRepository.GetOrgLists(queryParams);
 
             var orgLists = Mapper.Map<IEnumerable<OrgListDto>>(orgListsFromRepo);
+
+            var previousPageLink = orgListsFromRepo.HasPrevious
+                ? CreateOrgListsResourceUri(queryParams, ResourceUriType.PreviousPage)
+                : null;
+
+            var nextPageLink = orgListsFromRepo.HasNext
+                ? CreateOrgListsResourceUri(queryParams, ResourceUriType.NextPage)
+                : null;
+
+            var paginationMetadata = new
+            {
+                totalCount = orgListsFromRepo.TotalCount,
+                pageSize = orgListsFromRepo.PageSize,
+                currentPage = orgListsFromRepo.CurrentPage,
+                totalPages = orgListsFromRepo.TotalPages,
+                previousPageLink,
+                nextPageLink
+            };
+
+            Response.Headers.Add("X-Pagination",
+                JsonConvert.SerializeObject(paginationMetadata));
 
             return Ok(orgLists);
         }
@@ -52,6 +78,8 @@ namespace LearnNetCoreApi.Controllers
         public IActionResult AddOrgList([FromBody] OrgListForCreationDto orgList)
         {
             if (orgList == null) return BadRequest();
+
+            if (!ModelState.IsValid) return new UnprocessableEntityObjectResult(ModelState);
 
             var orgListEntity = Mapper.Map<OrgList>(orgList);
             _orgRepository.AddOrgList(orgListEntity);
@@ -79,7 +107,10 @@ namespace LearnNetCoreApi.Controllers
 
             var orgListToPatch = Mapper.Map<OrgListForUpdateDto>(orgListFromRepo);
 
-            patchDoc.ApplyTo(orgListToPatch); // Add validation for this
+            patchDoc.ApplyTo(orgListToPatch, ModelState);
+
+            TryValidateModel(orgListToPatch);
+            if (!ModelState.IsValid) return new UnprocessableEntityObjectResult(ModelState);
 
             Mapper.Map(orgListToPatch, orgListFromRepo);
             _orgRepository.UpdateOrgList(orgListFromRepo);
@@ -105,8 +136,42 @@ namespace LearnNetCoreApi.Controllers
                 throw new Exception($"Deleting orgList {orgListId} failed on save.");
             }
 
+            _logger.LogInformation($"Deleted orgList {orgListId}.");
+
             return NoContent();
         }
+
+        #region Private Methods
+
+        private string CreateOrgListsResourceUri(OrgListResourceParameters queryParams, ResourceUriType type)
+        {
+            switch (type)
+            {
+                case ResourceUriType.PreviousPage:
+                    return _urlHelper.Link("GetOrgLists",
+                        new
+                        {
+                            pageNumber = queryParams.PageNumber - 1,
+                            pageSize = queryParams.PageSize
+                        });
+                case ResourceUriType.NextPage:
+                    return _urlHelper.Link("GetOrgLists",
+                        new
+                        {
+                            pageNumber = queryParams.PageNumber + 1,
+                            pageSize = queryParams.PageSize
+                        });
+                default:
+                    return _urlHelper.Link("GetOrgLists",
+                        new
+                        {
+                            pageNumber = queryParams.PageNumber,
+                            pageSize = queryParams.PageSize
+                        });
+            }
+        }
+
+        #endregion
     }
 }
 

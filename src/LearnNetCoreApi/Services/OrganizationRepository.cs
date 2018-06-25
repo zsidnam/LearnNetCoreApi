@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using LearnNetCoreApi.Entities;
+using LearnNetCoreApi.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace LearnNetCoreApi.Services
@@ -21,9 +22,13 @@ namespace LearnNetCoreApi.Services
 
         #region OrgLists
 
-        public IEnumerable<OrgList> GetOrgLists()
+        public PagedList<OrgList> GetOrgLists(OrgListResourceParameters queryParams)
         {
-            return _context.OrgLists.OrderBy(l => l.Title);
+            var orgListsBeforePaging = _context.OrgLists
+                .OrderBy(l => l.Title);
+
+            return PagedList<OrgList>.Create(orgListsBeforePaging,
+                queryParams.PageNumber, queryParams.PageSize);
         }
 
         public OrgList GetOrgList(Guid orgListId)

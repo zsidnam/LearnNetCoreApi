@@ -1,12 +1,13 @@
 ﻿using LearnNetCoreApi.Entities;
 using System;
 using System.Collections.Generic;
+using LearnNetCoreApi.Helpers;
 
 namespace LearnNetCoreApi.Services
 {
     public interface IOrganizationRepository
     {
-        IEnumerable<OrgList> GetOrgLists();
+        PagedList<OrgList> GetOrgLists(OrgListResourceParameters queryParams);
         OrgList GetOrgList(Guid orgListId);
         bool OrgListExists(Guid orgListId);
         void AddOrgList(OrgList orgList);
